@@ -1,5 +1,6 @@
 var express = require('express');
-var swig = require('swig')
+var swig = require('swig');
+var sass = require('node-sass');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -17,12 +18,24 @@ app.engine('html', swig.renderFile);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 
+
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(
+    sass.middleware({
+        src: __dirname + '/assets', // where the sass files are
+        dest: __dirname + '/public', // where css should go
+        // includePaths: __dirname + '/assets/stylesheets',
+        debug: true // obvious
+    })
+);
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
