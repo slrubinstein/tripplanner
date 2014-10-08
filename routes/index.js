@@ -11,11 +11,11 @@ router.get('/', function(req, res) {
   Hotel.find(function(err, hotels) {
   	ThingsToDo.find(function(err, things){
   		Restaurant.find(function(err, restaurants){
-  			    res.render('index', { 
-    						hotels: hotels, 
-    						restaurants: restaurants, 
-    						things: things,
-    						title: "Trip Planner" 
+		    res.render('index', { 
+						hotels: hotels, 
+						restaurants: restaurants, 
+						things: things,
+						title: "Trip Planner" 
     		});
   		});
   	});

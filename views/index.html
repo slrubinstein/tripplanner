@@ -3,35 +3,71 @@
 {% block content %}
  
     <p>Welcome to {{title}}</p>
-
+		<br>
 		<div class="btn-toolbar" role="toolbar">
 			<div class="btn-group">
 			 <button type="button" class="btn btn-default">Day 1</button>
 			 <button type="button" class="btn btn-default">Day 2</button>
 			 <button type="button" class="btn btn-default">Day 3</button>
 			</div>
-			<div class="btn-group">
- 				<button type="button" class="btn btn-default">+Add Day</button>
+			<div id="days" class="btn-group">
+ 					<button type="button" class="btn btn-default">+Add Day</button>
 			</div>
 		</div>
 
+			<div class="btn-group inline">
+					<h3>Hotels</h3>
+	       <button id='nameField' type="button" class="btn btn-default">Hotels</button>
+	       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	         <span class="caret"></span>
+	         <span class="sr-only">Toggle Dropdown</span>
+	       </button>
+	       <ul class="dropdown-menu" role="menu">
+	       		{% for hotel in hotels %}
+	         <li><a href='/about'>{{hotel.name}}</a></li>
+	         {% endfor %}
+	       </ul>
+	         <div class="btn-group">
+	           <button type="button" class="btn btn-primary btn-md">ADD</button>
+	         </div>
+	     </div>
 
-		<div class='clearfix container'>
+	     <div class="btn-group inline">
+	     	<h3>Things To Do</h3>
+	       <button id='nameField' type="button" class="btn btn-default">Things to do</button>
+	       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	         <span class="caret"></span>
+	         <span class="sr-only">Toggle Dropdown</span>
+	       </button>
+	       <ul class="dropdown-menu" role="menu">
+	         {% for thing in things %}
+	         <li><a href='/about'>{{thing.name}}</a></li>
+	         {% endfor %}
+	       </ul>
+	         <div class="btn-group">
+	           <button type="button" class="btn btn-primary btn-md">ADD</button>
+	         </div>
+	     </div>
 
-				<div class='col-lg-3 col-md-3 col-sm-12'>
-					Hotels
-				</div>
-					
-				<div class='col-lg-3 col-md-3 col-sm-12'>
-					Things to do
-				</div>
+	     <div class="btn-group inline">
+	     	<h3>Restaurants</h3>
+	       <button id='nameField' type="button" class="btn btn-default">Restaurants</button>
+	       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	         <span class="caret"></span>
+	         <span class="sr-only">Toggle Dropdown</span>
+	       </button>
+	       <ul class="dropdown-menu" role="menu">
+	         {% for restaurant in restaurants %}
+	         <li><a href='/about'>{{restaurant.name}}</a></li>
+	         {% endfor %}
+	       </ul>
+	         <div class="btn-group">
+	           <button type="button" class="btn btn-primary btn-md">ADD</button>
+	         </div>
+	     </div>
+	   
 
-				<div class='col-lg-3 col-md-3 col-sm-12'>
-					Restaurants
-				</div>
-
-		</div>
-
+	     <div id='map-canvas' style='width: 400px; height:400px'></div>
 
 
 <!-- 		   <ul>
@@ -63,7 +99,7 @@
 <!-- 
 		  <script>
  
-			{% autoescape false %}
+			{% autoescape false %} 
 			var all_hotels = {{ hotels | json }};
 			var all_restaurants = {{ restaurants | json }};
 			var all_things_to_do = {{ things | json }};
