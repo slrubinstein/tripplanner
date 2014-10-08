@@ -18,7 +18,8 @@ var hotelSchema = new Schema({
 	name: String,
 	place: [placeSchema],
 	num_stars: Number,
-	amenities: String
+	amenities: String, 
+	listHistory: [], 
 });
 
 var thingsToDoSchema = new Schema({
