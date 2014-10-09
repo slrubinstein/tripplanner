@@ -19,3 +19,10 @@ h3 {
 
 #map-canvas {
   float: right; }
+
+#header {
+  margin-bottom: 50px; }
+
+h4 {
+  margin-left: -50px;
+  margin-top: 20px; }

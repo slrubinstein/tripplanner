@@ -5,13 +5,13 @@
     <p>Welcome to {{title}}</p>
 		<br>
 		<div class="btn-toolbar" role="toolbar">
-			<div class="btn-group">
-			 <button type="button" class="btn btn-default">Day 1</button>
-			 <button type="button" class="btn btn-default">Day 2</button>
-			 <button type="button" class="btn btn-default">Day 3</button>
+			<div id="daybtns" class="btn-group">
+			 <button type="button" class="btn btn-default dayButton">Day 1</button>
+		<!-- 	 <button type="button" class="btn btn-default dayButton">Day 2</button>
+			 <button type="button" class="btn btn-default dayButton">Day 3</button> -->
 			</div>
 			<div id="days" class="btn-group">
- 					<button type="button" class="btn btn-default">+Add Day</button>
+ 					<button id="addDay" type="button" class="btn btn-default">+Add Day</button>
 			</div>
 		</div>
 
@@ -28,7 +28,7 @@
 	         {% endfor %}
 	       </ul>
 	         <div class="btn-group">
-	           <button type="button" class="addButton btn btn-primary btn-md">ADD</button>
+	           <button id="hotels" type="button" class="addButton btn btn-primary btn-md">ADD</button>
 	         </div>
 	     </div>
 
@@ -62,23 +62,17 @@
 	         {% endfor %}
 	       </ul>
 	         <div class="btn-group">
-	           <button type="button" class="addButton btn btn-primary btn-md">ADD</button>
+	           <button id="restaurants" type="button" class="addButton btn btn-primary btn-md">ADD</button>
 	         </div>
 	     </div>
 	   	<div class="container">
-	   		<h2>Plan for {{}} </h2>
-	   		<ul>
-	   			<li><p>Hotel</p><li>
-	   					<li></li>
-	   			<li><p>Things To Do</p></li>
-	   					<li></li>
-	   					<li></li>
-	   			<li><p>Restaurants</p></li>
-	   					<li></li>
-	   					<li></li>
-	   		</ul>
-
-	   	</div>
+	   		<h2 id="header">Plan for Your Trip </h2>
+	   			<li><h4>Hotel</h4><ul id="hotelsList"></ul></li>
+	   				
+	   			<li><h4>Things To Do</h4><ul id="thingsList"></ul></li>
+	   			<li><h4>Restaurants</h4><ul id="restaurantsList"></li>
+	   			
+		  </div>
 	   <br>
 	   <br>
 	   <br>

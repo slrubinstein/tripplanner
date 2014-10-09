@@ -1,38 +1,3 @@
- //   console.log('document is ready');
-// // $('.dropdown-toggle li a').on('click', function(event){
-// //     console.log('happy days')
-// //     event.preventDefault(); 
-// //     $(this).addClass('selected'); 
-// //     $(this).parent.text($(this).text())   
-// // })
-
-
-
-
-
-
-// function initialize() {
-//  var mapOptions = {
-//    zoom: 8,
-//    center: new google.maps.LatLng(-34.397, 150.644)
-//  };
-
-//  var map = new google.maps.Map(document.getElementById('map-canvas'),
-//      mapOptions);
-// }
-
-// function loadScript() {
-//  var script = document.createElement('script');
-//  script.type = 'text/javascript';
-//  script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&' +
-//      'callback=initialize';
-//  document.body.appendChild(script);
-// }
-
-// window.onload = loadScript;
-
-
-
 function initialize_gmaps() {
  
   // initialize new google maps LatLng object
@@ -64,7 +29,6 @@ function initialize_gmaps() {
 
 $(document).ready(function() {
 
-  
 
   console.log('document is ready');
   initialize_gmaps();
@@ -75,39 +39,103 @@ $(document).ready(function() {
    $(this).closest('.btn-group').find('#nameField').text($(this).text());
   });
  
-var days = [{}, {}, {}];
+// var days = [{'things': [], 'hotel': 'String', 'restaurants': [], day: num, markers: []}, {}, {}];
 
+var dayPlans = [{
+  //must start with day 1
+  hotels: [], 
+  thingsToDo: [], 
+  restaurants: [], 
+  dayNum: 1 
+}];
 
-$('.addButton').on('click', function(){
-  // console.log('add pushed');
-  // console.log($(this).id);
-  // console.log(this);
-  if (this.id === 'things'){
-    console.log('in if');
-    var thing = $(this).closest('.btn-group.inline').find('#nameField').text();
-    console.log('this is the namefield', $(this).closest('.btn-group.inline').find('#nameField').text());
-    console.log(thing);
-    //if this day === ''; find the day we're one 
-    days[0]['things'] = (thing);
-    $('ul').append(thing);
-    console.log(days);
+var currentDay = dayPlans[0]; 
+
+function AddADay(){
+
+  var addedDay = {
+    hotels: [], 
+    thingsToDo: [], 
+    restaurants: [], 
+    dayNum: dayPlans.length + 1
   }
-})
-    // push to the database
-    //     if .addButton.id === things 
-    //     then day.things.push(item)
-    //     append a tag with the text()
-    // $(this).
+
+  var dayPlans.push(addedDay)
+
+  
+}
 
 
-//day buttons create days that add buttons populate with activities     
+function renderDays(){
 
-//think about not creating a day until 'add day' button is pressed 
+  var hotelsList = ""; 
+  currentDay.hotels.forEach(function(hotel){
+    hotelsList += '<li>' + hotel + '</li>'; 
+    });
+    $('#hotelsList').html(function(){
+      return hotelsList; 
+  });
+
+   var thingsToDo = ""; 
+   currentDay.thingsToDo.forEach(function(thing){
+    thingsToDo += '<li>' + thing + '</li>'; 
+   }); 
+   $('#thingsList').html(function(){
+    return thingsToDo; 
+   })
+
+   var restaurants = ""; 
+   currentDay.restaurants.forEach(function(restaurant){
+    restaurants += '<li>' + restaurant + '</li>'; 
+   }); 
+   $('#restaurantsList').html(function(){
+    return restaurants; 
+   })
+}
 
 
+$('.addButton').on('click', function(event){
+  var thing = $(this).closest('.btn-group.inline').find('#nameField').text();
+  console.log('this things', thing); 
+  if (this.id === 'things'){ 
+        currentDay.thingsToDo.push(thing);
+        renderDays(); 
+        console.log(currentDay);    
+    }
+  else if (this.id === 'hotels'){
+    if (currentDay.hotels.length < 1){
+      currentDay.hotels.push(thing);
+      renderDays(); 
+      console.log(currentDay);
+    } else {
+      alert('You must remove a hotel to add one!')
+      console.log(currentDay);
+    } 
+  }
+  else if (this.id === 'restaurants'){
+    if (currentDay.restaurants.length < 3){
+      currentDay.restaurants.push(thing); 
+      renderDays(); 
+      console.log(currentDay);
+    }
+  }
+});
 
 
+// $(.removeButton).on('click', function(){})
 
+$('#addDay').on('click', function(){ 
+    addADay()
+});
+
+
+// $('.dayButton').on('click', function(){
+//   event.preventDefault(); 
+//   var header = 'Plan for ';
+//     $('#header').text(header + $(this).text());
+
+
+// });
 
 
 
