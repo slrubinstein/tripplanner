@@ -6,9 +6,6 @@
 		<br>
 		<div class="btn-toolbar" role="toolbar">
 			<div id="daybtns" class="btn-group">
-			<!--  <button type="button" class="btn btn-default dayButton">Day 1</button> -->
-		<!-- 	 <button type="button" class="btn btn-default dayButton">Day 2</button>
-			 <button type="button" class="btn btn-default dayButton">Day 3</button> -->
 			</div>
 			<div id="days" class="btn-group">
  					<button id="addDay" type="button" class="btn btn-default">+Add Day</button>
@@ -17,16 +14,11 @@
 
 			<div class="btn-group inline">
 					<h3>Hotels</h3>
-	       <button id='nameField' type="button" class="btn btn-default">{{hotels[0].name}}</button>
-	       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-	         <span class="caret"></span>
-	         <span class="sr-only">Toggle Dropdown</span>
-	       </button>
-	       <ul class="dropdown-menu" role="menu">
-	       		{% for hotel in hotels %}
-	         <li><a href='#'>{{hotel.name}}</a></li>
-	         {% endfor %}
-	       </ul>
+
+
+	       	<select name='hotels'></select>
+
+
 	         <div class="btn-group">
 	           <button id="hotels" type="button" class="addButton btn btn-primary btn-md">ADD</button>
 	         </div>
@@ -34,16 +26,9 @@
 
 	     <div class="btn-group inline">
 	     	<h3>Things To Do</h3>
-	       <button id='nameField' type="button" class="btn btn-default">{{things[0].name}}</button>
-	       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-	         <span class="caret"></span>
-	         <span class="sr-only">Toggle Dropdown</span>
-	       </button>         
-	       <ul class="dropdown-menu" role="menu">
-	         {% for thing in things %}
-	         <li><a href='#'>{{thing.name}}</a></li>
-	         {% endfor %}
-	       </ul>
+	    
+
+	       	<select name="things"></select>
 	         <div class="btn-group">
 	           <button  id="things" type="button" class="addButton btn btn-primary btn-md">ADD</button>
 	         </div>
@@ -51,16 +36,8 @@
 
 	     <div class="btn-group inline">
 	     	<h3>Restaurants</h3>
-	       <button id='nameField' type="button" class="btn btn-default">{{restaurants[0].name}}</button>
-	       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-	         <span class="caret"></span>
-	         <span class="sr-only">Toggle Dropdown</span>
-	       </button>
-	       <ul class="dropdown-menu" role="menu">
-	         {% for restaurant in restaurants %}
-	         <li><a href='/about'>{{restaurant.name}}</a></li>
-	         {% endfor %}
-	       </ul>
+
+	       <select name="restaurants"></select>
 	         <div class="btn-group">
 	           <button id="restaurants" type="button" class="addButton btn btn-primary btn-md">ADD</button>
 	         </div>
@@ -70,53 +47,29 @@
 	   			<li><h4>Hotel</h4><ul id="hotelsList"></ul></li>
 	   				
 	   			<li><h4>Things To Do</h4><ul id="thingsList"></ul></li>
-	   			<li><h4>Restaurants</h4><ul id="restaurantsList"></li>
+	   			<li><h4>Restaurants</h4><ul id="restaurantsList"></ul></li>
 	   			
 		  </div>
 	   <br>
-	   <br>
-	   <br>
+		   
 	   <br>
 
 
 	     <div id='map-canvas' style='width: 400px; height:400px' class='col-md-8'></div>
 
 
-<!-- 		   <ul>
-		    {% for hotel in hotels %}
-		    <li>{{hotel.name}}</li>
-				<li>{{hotel.num_stars}}</li>
-
-
-				{% endfor %}
-		  </ul>
-
-		  <ul>
-		    {% for restaurant in restaurants %}
-		    <li>{{restaurant.name}}</li>
-				<li>{{restaurant.cuisine}}</li>
-				
-
-				{% endfor %}
-		  </ul>
-
-		  <ul>
-		    {% for thing in things %}
-		    <li>{{thing.name}}</li>
-				<li>{{thing.phone}}</li>
-				
-
-				{% endfor %}
-		  </ul> -->
-<!-- 
 		  <script>
  
 			{% autoescape false %} 
 			var all_hotels = {{ hotels | json }};
 			var all_restaurants = {{ restaurants | json }};
 			var all_things_to_do = {{ things | json }};
+
+
+			// for (hotel in all_hotels) 
+
 			{% endautoescape %}
 			 
 			</script>
- -->
+
 {% endblock %}

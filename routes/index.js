@@ -15,12 +15,40 @@ router.get('/', function(req, res) {
 						hotels: hotels, 
 						restaurants: restaurants, 
 						things: things,
-						title: "Trip Planner" 
+						title: "Trip Planner",
+						each_place: hotels.place
     		});
   		});
   	});
   });
 });
+
+
+/*
+router.get('/', 
+	function(req, res, next) {
+		Hotel.find(function(err, results) {
+			req.body.hotels = results;
+			next();
+		});
+	},
+	function(req, res, next) {
+		ThingsToDo.find(function(err, results) {
+			req.body.thingsToDo = results;
+			next();
+		});
+	},
+	function(req, res, next) {
+		Restaurants.find(function(err, results) {
+			req.body.restaurants = results;
+			next();
+		});
+	},
+	function(req. res. next) {
+		res.render...
+	})
+*/
+
 
 router.get('/about', function(req, res) {
 	res.render('about', {
