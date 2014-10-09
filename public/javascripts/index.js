@@ -1,5 +1,4 @@
-
-//   console.log('document is ready');
+ //   console.log('document is ready');
 // // $('.dropdown-toggle li a').on('click', function(event){
 // //     console.log('happy days')
 // //     event.preventDefault(); 
@@ -64,12 +63,56 @@ function initialize_gmaps() {
 }
 
 $(document).ready(function() {
+
+  
+
   console.log('document is ready');
   initialize_gmaps();
 
  $(".dropdown-menu li a").click(function(event){
-  console.log('clicked');
     event.preventDefault();
+    console.log($(this).closest('.btn-group').find('#nameField').text());
    $(this).closest('.btn-group').find('#nameField').text($(this).text());
   });
-}); 
+ 
+var days = [{}, {}, {}];
+
+
+$('.addButton').on('click', function(){
+  // console.log('add pushed');
+  // console.log($(this).id);
+  // console.log(this);
+  if (this.id === 'things'){
+    console.log('in if');
+    var thing = $(this).closest('.btn-group.inline').find('#nameField').text();
+    console.log('this is the namefield', $(this).closest('.btn-group.inline').find('#nameField').text());
+    console.log(thing);
+    //if this day === ''; find the day we're one 
+    days[0]['things'] = (thing);
+    $('ul').append(thing);
+    console.log(days);
+  }
+})
+    // push to the database
+    //     if .addButton.id === things 
+    //     then day.things.push(item)
+    //     append a tag with the text()
+    // $(this).
+
+
+//day buttons create days that add buttons populate with activities     
+
+//think about not creating a day until 'add day' button is pressed 
+
+
+
+
+
+
+
+
+
+
+
+
+});

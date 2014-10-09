@@ -14,3 +14,8 @@ h3 {
 /*#days{
 	margin-right: 50px;
 }*/
+#nameField {
+  max-width: 160px; }
+
+#map-canvas {
+  float: right; }

@@ -17,41 +17,41 @@
 
 			<div class="btn-group inline">
 					<h3>Hotels</h3>
-	       <button id='nameField' type="button" class="btn btn-default">Hotels</button>
+	       <button id='nameField' type="button" class="btn btn-default">{{hotels[0].name}}</button>
 	       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 	         <span class="caret"></span>
 	         <span class="sr-only">Toggle Dropdown</span>
 	       </button>
 	       <ul class="dropdown-menu" role="menu">
 	       		{% for hotel in hotels %}
-	         <li><a href='/about'>{{hotel.name}}</a></li>
+	         <li><a href='#'>{{hotel.name}}</a></li>
 	         {% endfor %}
 	       </ul>
 	         <div class="btn-group">
-	           <button type="button" class="btn btn-primary btn-md">ADD</button>
+	           <button type="button" class="addButton btn btn-primary btn-md">ADD</button>
 	         </div>
 	     </div>
 
 	     <div class="btn-group inline">
 	     	<h3>Things To Do</h3>
-	       <button id='nameField' type="button" class="btn btn-default">Things to do</button>
+	       <button id='nameField' type="button" class="btn btn-default">{{things[0].name}}</button>
 	       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 	         <span class="caret"></span>
 	         <span class="sr-only">Toggle Dropdown</span>
-	       </button>
+	       </button>         
 	       <ul class="dropdown-menu" role="menu">
 	         {% for thing in things %}
-	         <li><a href='/about'>{{thing.name}}</a></li>
+	         <li><a href='#'>{{thing.name}}</a></li>
 	         {% endfor %}
 	       </ul>
 	         <div class="btn-group">
-	           <button type="button" class="btn btn-primary btn-md">ADD</button>
+	           <button  id="things" type="button" class="addButton btn btn-primary btn-md">ADD</button>
 	         </div>
 	     </div>
 
 	     <div class="btn-group inline">
 	     	<h3>Restaurants</h3>
-	       <button id='nameField' type="button" class="btn btn-default">Restaurants</button>
+	       <button id='nameField' type="button" class="btn btn-default">{{restaurants[0].name}}</button>
 	       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 	         <span class="caret"></span>
 	         <span class="sr-only">Toggle Dropdown</span>
@@ -62,12 +62,30 @@
 	         {% endfor %}
 	       </ul>
 	         <div class="btn-group">
-	           <button type="button" class="btn btn-primary btn-md">ADD</button>
+	           <button type="button" class="addButton btn btn-primary btn-md">ADD</button>
 	         </div>
 	     </div>
-	   
+	   	<div class="container">
+	   		<h2>Plan for {{}} </h2>
+	   		<ul>
+	   			<li><p>Hotel</p><li>
+	   					<li></li>
+	   			<li><p>Things To Do</p></li>
+	   					<li></li>
+	   					<li></li>
+	   			<li><p>Restaurants</p></li>
+	   					<li></li>
+	   					<li></li>
+	   		</ul>
 
-	     <div id='map-canvas' style='width: 400px; height:400px'></div>
+	   	</div>
+	   <br>
+	   <br>
+	   <br>
+	   <br>
+
+
+	     <div id='map-canvas' style='width: 400px; height:400px' class='col-md-8'></div>
 
 
 <!-- 		   <ul>
