@@ -1,12 +1,12 @@
-
-
 $(document).ready(function() {
-// ADD A DAY BUTTON FUNCTIONALITY //
 
+
+// GLOBALS
 var dayPlans = [];
 var currentDay;
-// var markers = [[40.714985, -74.015841], [40.717873, -73.995231]]; 
 
+
+// ADD A DAY BUTTON FUNCTIONALITY //
 
 var addADay = function(){
 
