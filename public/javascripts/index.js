@@ -60,7 +60,7 @@ $(document).ready(function() {
     dayPlans.push(addedDay);
 
     // set new currentDay
-    currentDay = dayPlans[addedDay.dayNum - 1]; 
+    // currentDay = dayPlans[addedDay.dayNum - 1]; 
 
     $dayButton = 
       $("<button type='button' class='btn btn-default dayButton'>Day " + 
@@ -69,7 +69,8 @@ $(document).ready(function() {
     $dayButton.appendTo($("#daybtns")); 
 
     $dayButton.on('click', function(event){
-      currentDay = dayPlans[addedDay.dayNum - 1]; 
+      currentDay = dayPlans[$(this).index()];
+      console.log('day clicked: ', $(this).index()) 
       console.log('DAY', currentDay.dayNum)
       renderDays(); 
       
@@ -123,6 +124,9 @@ $(document).ready(function() {
     "<button type='button' class='btn-xs btn-danger del'> x </button>";
 
   function renderDays(){
+
+    $('#subhead').empty()
+    $('#subhead').append('Day ', currentDay.dayNum)
 
     var hotelsList = '';
     if (currentDay.hotel.length > 0) {
@@ -183,30 +187,41 @@ $(document).ready(function() {
 
   $('#deleteDay').on('click', function() {
     // console.log('dayplans', dayPlans)
-    console.log('day', currentDay.dayNum)
-    var deletedDay = currentDay.dayNum
+    // console.log('day', currentDay.dayNum)
+    // var deletedDay = currentDay.dayNum
 
-    console.log('deleting day', deletedDay)
+    // console.log('deleting day', deletedDay)
 
-    if (deletedDay === 1) {
-      currentDay = dayPlans[0];
-    } else {
-      currentDay = dayPlans[deletedDay - 2]
-    }
+    // if (deletedDay === 1) {
+    //   currentDay = dayPlans[0];
+    // } else {
+    //   currentDay = dayPlans[deletedDay - 2]
+    // }
 
-    console.log('new day', currentDay)
+    // console.log('new day', currentDay)
 
-    for (deletedDay; deletedDay <= dayPlans.length; deletedDay++) {
-      console.log('FOR LOOP')
-      console.log(dayPlans[deletedDay].dayNum, dayPlans[deletedDay+1].dayNum)
-      dayPlans[deletedDay-1] = dayPlans[deletedDay];
-      deletedDay++;
-    }
-    dayPlans.pop()
+    // for (deletedDay; deletedDay <= dayPlans.length; deletedDay++) {
+    //   console.log('FOR LOOP')
+    //   console.log(dayPlans[deletedDay].dayNum, dayPlans[deletedDay+1].dayNum)
+    //   dayPlans[deletedDay-1] = dayPlans[deletedDay];
+    //   deletedDay++;
+    // }
+    // dayPlans.pop()
 
-    console.log($('.dayButton').last())
-    $('.dayButton').last().remove();
+    // console.log($('.dayButton').last())
+    
     // console.log('new day plans', dayPlans)
+
+    var deletedDay = currentDay;
+
+    currentDay = dayPlans[deletedDay.dayNum-1]
+
+    for(var i = deletedDay.dayNum; i < dayPlans.length; i++) {
+      dayPlans[i-1] = dayPlans[i]
+    }
+    dayPlans.pop();
+    $('.dayButton').last().remove();
+
   })
 
 });
