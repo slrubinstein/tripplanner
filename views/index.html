@@ -4,72 +4,60 @@
  
     <p>Welcome to {{title}}</p>
 		<br>
-		<div class="btn-toolbar" role="toolbar">
+		<div class="btn-toolbar col-md-3" role="toolbar">
+		   	<h2 id="header">Plan for Your Trip </h2>
 			<div id="daybtns" class="btn-group">
 			</div>
 			<div id="days" class="btn-group">
- 					<button id="addDay" type="button" class="btn btn-default">+Add Day</button>
+ 				<button id="addDay" type="button" class="btn btn-default">+Add Day</button>
 			</div>
+			<div id="days" class="btn-group">
+ 				<button id="deleteDay" type="button" class="btn btn-danger">Delete Day</button>
+			</div>
+			<br>
+			<br>
+		  <div class="container this-plan col-md-12">
+				<li><h4>Hotel</h4><ul id="hotelsList"></ul></li>				
+	 			<li><h4>Things To Do</h4><ul id="thingsList"></ul></li>
+	 			<li><h4>Restaurants</h4><ul id="restaurantsList"></ul></li> 	
+		  </div>
 		</div>
 
-			<div class="btn-group inline">
-					<h3>Hotels</h3>
+		<div class='col-md-9'>
+			<div class="btn-group inline col-lg-3 col-md-6 col-sm-12">
+				<h3>Hotels</h3>
+		    <select class='form-control' name='hotels'></select>
+		    <div class="btn-group">
+		      <button id="hotels" type="button" class="addButton btn btn-primary btn-md">ADD</button>
+		    </div>
+	    </div>
 
-
-	       	<select class='form-control' name='hotels'></select>
-
-
-	         <div class="btn-group">
-	           <button id="hotels" type="button" class="addButton btn btn-primary btn-md">ADD</button>
-	         </div>
-	     </div>
-
-	     <div class="btn-group inline">
-	     	<h3>Things To Do</h3>
-	    
-
-	       	<select class='form-control' name="things"></select>
-	         <div class="btn-group">
-	           <button  id="things" type="button" class="addButton btn btn-primary btn-md">ADD</button>
-	         </div>
-	     </div>
-
-	     <div class="btn-group inline">
-	     	<h3>Restaurants</h3>
-
-	       <select class='form-control' name="restaurants"></select>
-	         <div class="btn-group">
-	           <button id="restaurants" type="button" class="addButton btn btn-primary btn-md">ADD</button>
-	         </div>
-	     </div>
-	   	<div class="container">
-	   		<h2 id="header">Plan for Your Trip </h2>
-	   			<li><h4>Hotel</h4><ul id="hotelsList"></ul></li>
-	   				
-	   			<li><h4>Things To Do</h4><ul id="thingsList"></ul></li>
-	   			<li><h4>Restaurants</h4><ul id="restaurantsList"></ul></li>
-	   			
+		  <div class="btn-group inline col-lg-3 col-md-6 col-sm-12">
+	   	<h3>Things To Do</h3>	    
+	      <select class='form-control' name="things"></select>
+	      <div class="btn-group">
+	        <button  id="things" type="button" class="addButton btn btn-primary btn-md">ADD</button>
+	      </div>
 		  </div>
-	   <br>
-		   
-	   <br>
+
+		  <div class="btn-group inline col-lg-3 col-md-6 col-sm-12">
+		    <h3>Restaurants</h3>
+		    <select class='form-control' name="restaurants"></select>
+		    <div class="btn-group">
+	        <button id="restaurants" type="button" class="addButton btn btn-primary btn-md">ADD</button>
+		    </div>
+		  </div>
+	  	<div id='map-canvas' style='width: 700px; height:600px' class='col-md-12'></div>
+	  </div>
 
 
-	     <div id='map-canvas' style='width: 400px; height:400px' class='col-md-8'></div>
 
-
-		  <script>
- 
+	  <script>
 			{% autoescape false %} 
 			var all_hotels = {{ hotels | json }};
 			var all_restaurants = {{ restaurants | json }};
 			var all_things_to_do = {{ things | json }};
-
-
-			// for (hotel in all_hotels) 
-
 			{% endautoescape %}
-			 
-			</script>
+		</script>
 
 {% endblock %}

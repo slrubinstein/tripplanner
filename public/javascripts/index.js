@@ -1,213 +1,213 @@
 $(document).ready(function() {
 
+  // GLOBALS
+  var dayPlans = [];
+  var currentDay;
 
-// GLOBALS
-var dayPlans = [];
-var currentDay;
+  var mapOptions = {
+    zoom: 14,
+    center: new google.maps.LatLng(40.705137, -74.007624)
+  };
 
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+    mapOptions);
 
-// ADD A DAY BUTTON FUNCTIONALITY //
-
-var addADay = function(){
-
-  var addedDay = {
-    hotels: [], 
-    thingsToDo: [], 
-    restaurants: [], 
-    markers: [], 
-    dayNum: dayPlans.length + 1
+  // LOAD DROP DOWN MENUS //
+  function loadList(obj, selector) {
+    return selector.append($("<option>" + obj.name + "</option>").data({obj:obj, marker:obj.marker})); 
   }
 
-  dayPlans.push(addedDay);
-  currentDay = dayPlans[addedDay.dayNum - 1]; 
+  function addMarker(obj) {
+    obj.marker = new google.maps.Marker({
+      position: new google.maps.LatLng(obj.place[0].location[0], obj.place[0].location[1]),
+      title: obj.name,
+      animation: google.maps.Animation.DROP
+    });
+  }
 
-  $dayButton = $("<button type='button' class='btn btn-default dayButton'>Day " + addedDay.dayNum + "</button>"); 
+  all_hotels.forEach(function(hotel) {
+    addMarker(hotel);
+    var $selector = $("select[name='hotels']");
+    loadList(hotel, $selector);
+  });
 
-  $dayButton.appendTo($("#daybtns")); 
+  all_restaurants.forEach(function(restaurant) {
+    addMarker(restaurant);
+    var $selector = $('select[name=restaurants]');
+    loadList(restaurant, $selector);
+  });
 
-  $dayButton.on('click', function(event){
+  all_things_to_do.forEach(function(thing) {
+    addMarker(thing);
+    var $selector = $('select[name=things]');
+    loadList(thing, $selector);
+  });
+
+
+  // ADD A DAY BUTTON FUNCTIONALITY //
+
+  var addADay = function(){
+
+    var addedDay = {
+      hotel: [], 
+      thingsToDo: [], 
+      restaurants: [], 
+      markers: [], 
+      dayNum: dayPlans.length + 1
+    };
+
+    // push new day object to dayPlans array
+    dayPlans.push(addedDay);
+
+    // set new currentDay
     currentDay = dayPlans[addedDay.dayNum - 1]; 
-    renderDays(); 
-    initialize_gmaps();
 
-  }) 
-}
+    $dayButton = 
+      $("<button type='button' class='btn btn-default dayButton'>Day " + 
+      addedDay.dayNum + "</button>"); 
 
-  addADay(); 
+    $dayButton.appendTo($("#daybtns")); 
+
+    $dayButton.on('click', function(event){
+      currentDay = dayPlans[addedDay.dayNum - 1]; 
+      console.log('DAY', currentDay.dayNum)
+      renderDays(); 
+      
+    });
+  }
 
   $("#addDay").on('click', function(event){
     addADay(); 
   })
 
 
+  // on app start, run addADay
+  addADay(); 
 
 
-//MAP FUNCTIONALITY 
+  //     ADD REST/HOTEL/THING BUTTON      //
 
-//DROP MARKERS
+  $('.addButton').on('click', function(event){
 
+    var selectedHotel = $('select[name="hotels"] :selected')
+    var selectedThing = $('select[name="things"] :selected')
+    var selectedRestaurant = $('select[name="restaurants"] :selected')
 
-var initialize_gmaps = function() {
-
-  var mapOptions = {
-    zoom: 12,
-    center: new google.maps.LatLng(40.705137, -74.007624)
-  };
-
-  var map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
-
-}
-
-initialize_gmaps();
-
-
-var update_gmaps = function() {
-
-  var bounds = new google.maps.LatLngBounds();
-
-
-  var mapOptions = {
-    zoom: 12,
-    center: new google.maps.LatLng(40.705137, -74.007624)
-  };
-
-  var map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
+    if (this.id === 'things'){ 
+      currentDay.thingsToDo.push(selectedThing.val());  
+      selectedThing.data('marker').setMap(map);
+      renderDays(); 
+      }
+    else if (this.id === 'hotels'){
+      if (currentDay.hotel.length < 1){
+        currentDay.hotel.push(selectedHotel.val());
+        selectedHotel.data('marker').setMap(map);
+        renderDays(); 
+      } else {
+        alert('You must remove a hotel to add one!')
+      } 
+    }
+    else if (this.id === 'restaurants'){
+      if (currentDay.restaurants.length < 3){
+        currentDay.restaurants.push(selectedRestaurant.val()); 
+        selectedRestaurant.data('marker').setMap(map);
+        renderDays();      
+      }
+    }
+  })
 
 
-  currentDay.markers.forEach(function(m) {
-    var myLatlng = new google.maps.LatLng(Number(m[0]), Number(m[1]));
-  
-    bounds.extend(myLatlng);
+  ////////////RENDER DAYS ////////////////////////
 
-    // To add the marker to the map, use the 'map' property
-    var marker = new google.maps.Marker({
-        position: myLatlng,
-        map: map,
-        title:"Hello World!"
-    });
+  delBtn = 
+    "<button type='button' class='btn-xs btn-danger del'> x </button>";
 
-  });
-  map.fitBounds(bounds);
+  function renderDays(){
 
-
-}
-
-
-
- // LOAD DROP DOWN MENUS //
-function loadList(obj, selector) {
-  return selector.append($("<option data-location='"+obj.place[0].location+"'>" + obj.name + "</option>")); 
-}
-
-all_hotels.forEach(function(hotel) {
-  var $selector = $("select[name='hotels']")
-  loadList(hotel, $selector)
-})
-
-all_restaurants.forEach(function(restaurant) {
-  var $selector = $('select[name=restaurants]')
-  loadList(restaurant, $selector)
-})
-
-all_things_to_do.forEach(function(thing) {
-  var $selector = $('select[name=things]')
-  loadList(thing, $selector)
-})
-
- // var allMarkers = [];  
-
-
-////////////RENDER DAYS ////////////////////////
-
-$delBtn = $("<button type='button' class='btn-xs btn-danger dayButton del'> Delete + </button>");
-
-function renderDays(){
-  var hotelsList = ""; 
-  currentDay.hotels.forEach(function(hotel){
-    var thisHotel = '<li>' + hotel + '</li>'
-    hotelsList += thisHotel; 
-    console.log('hotels for each')
-    });
-    $delBtn.appendTo($('#hotelsList')); 
+    var hotelsList = '';
+    if (currentDay.hotel.length > 0) {
+      hotelsList += '<li>' + currentDay.hotel + delBtn + '</li>'
+    }
     $('#hotelsList').html(function(){
       return hotelsList; 
+    });
+    var thingsToDo = ""; 
+    currentDay.thingsToDo.forEach(function(thing){
+      things = '<li>' + thing + delBtn + '</li>';
+      thingsToDo += things; 
+      $(things).append(delBtn)  
+    });
 
-  });
+    $('#thingsList').html(function(){
+      return thingsToDo; 
+    })
 
-   var thingsToDo = ""; 
-   currentDay.thingsToDo.forEach(function(thing){
-        console.log('things for each')
-        things = '<li>' + thing + '</li>';
-    thingsToDo += things; 
-      $(things).append($delBtn)
-    
-   }); 
-   $('#thingsList').html(function(){
-    return thingsToDo; 
-   })
+    var restaurants = ""; 
+    currentDay.restaurants.forEach(function(restaurant){      
+      restaurants += '<li>' + restaurant + delBtn + '</li>'; 
+    }); 
 
-   var restaurants = ""; 
-   currentDay.restaurants.forEach(function(restaurant){
-        console.log('restaurants for each')
+    $('#restaurantsList').html(function(){
+      return restaurants; 
+    })
+  }
 
-    restaurants += '<li>' + restaurant + '</li>'; 
-    // $(this).closest('li').append($delBtn)
-   }); 
-   $('#restaurantsList').html(function(){
-    return restaurants; 
-   })
+  // DELETE ITEM HANDLER
+  $('.this-plan').on('click', '.del', function(event){
+    var $itemToRemove = $(this).closest('li'); 
+    // delete item from currentDay array
+    // currentDay.hotels.splice(selectedIndex, 1)
+    if ($itemToRemove.parent().attr('id') === 'restaurantsList')
+      removeRestaurant($itemToRemove);
+    if ($itemToRemove.parent().attr('id') === 'hotelsList')
+      removeHotel($itemToRemove);
+    if ($itemToRemove.parent().attr('id') === 'thingsList')
+      removeThing($itemToRemove);
 
-   update_gmaps();
-}
+    $itemToRemove.remove()
+  }); 
 
+  function removeHotel(hotel) {
+    currentDay.hotel = [];
+  }
 
+  function removeRestaurant(restaurant) {
+    currentDay.restaurants.splice(restaurant.index() , 1)
+  }
 
-$delBtn.on('click', function(event){
-    $(this).closest('li').remove(); 
-}); 
+  function removeThing(thing) {
+    currentDay.thingsToDo.splice(thing.index() , 1)
+  }
 
+  // DELETE DAY HANDLER
 
-//     ADD REST/HOTEL/THING BUTTON      //
+  $('#deleteDay').on('click', function() {
+    // console.log('dayplans', dayPlans)
+    console.log('day', currentDay.dayNum)
+    var deletedDay = currentDay.dayNum
 
-$('.addButton').on('click', function(event){
+    console.log('deleting day', deletedDay)
 
-  var selectedHotel = $('select[name="hotels"] :selected')
-  var selectedThing = $('select[name="things"] :selected')
-  var selectedRestaurant = $('select[name="restaurants"] :selected')
-
-  var place;
-
-  if (this.id === 'things'){ 
-        currentDay.thingsToDo.push(selectedThing.val());
-        currentDay.markers.push(selectedThing.attr('data-location').split(","))
-        renderDays(); 
-    }
-  else if (this.id === 'hotels'){
-    if (currentDay.hotels.length < 1){
-      currentDay.hotels.push(selectedHotel.val());
-      currentDay.markers.push(selectedHotel.attr('data-location').split(","))
-      renderDays(); 
-
+    if (deletedDay === 1) {
+      currentDay = dayPlans[0];
     } else {
-      alert('You must remove a hotel to add one!')
-
-    } 
-  }
-  else if (this.id === 'restaurants'){
-    if (currentDay.restaurants.length < 3){
-      currentDay.restaurants.push(selectedRestaurant.val()); 
-      currentDay.markers.push(selectedRestaurant.attr('data-location').split(","));
-      renderDays(); 
-      
+      currentDay = dayPlans[deletedDay - 2]
     }
-  }
-      update_gmaps();
-})
 
+    console.log('new day', currentDay)
 
-  
+    for (deletedDay; deletedDay <= dayPlans.length; deletedDay++) {
+      console.log('FOR LOOP')
+      console.log(dayPlans[deletedDay].dayNum, dayPlans[deletedDay+1].dayNum)
+      dayPlans[deletedDay-1] = dayPlans[deletedDay];
+      deletedDay++;
+    }
+    dayPlans.pop()
+
+    console.log($('.dayButton').last())
+    $('.dayButton').last().remove();
+    // console.log('new day plans', dayPlans)
+  })
 
 });
 

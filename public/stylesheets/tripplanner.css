@@ -2,9 +2,9 @@ div.inline {
   float: right;
   margin-left: 50px; }
 
-h3 {
-  margin-top: -32px; }
-
+/*h3 {
+	margin-top:-32px;
+}*/
 .btn-toolbar .btn {
   margin-top: 10px; }
 
@@ -18,11 +18,21 @@ h3 {
   max-width: 160px; }
 
 #map-canvas {
-  float: right; }
+  float: right;
+  margin-top: 20px; }
+
+li {
+  list-style-type: none; }
 
 #header {
   margin-bottom: 50px; }
 
-h4 {
-  margin-left: -50px;
-  margin-top: 20px; }
+/*h4 {
+	margin-left: -50px; 
+	margin-top: 20px;
+}*/
+.del {
+  margin: 5px; }
+
+#days {
+  margin-bottom: 20px; }
