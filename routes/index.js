@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 var Hotel = models.Hotel;
-// var Place = models.Place;
 var ThingsToDo = models.ThingsToDo;
 var Restaurant = models.Restaurant; 
 

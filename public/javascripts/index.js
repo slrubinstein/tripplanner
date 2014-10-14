@@ -47,48 +47,98 @@ $(document).ready(function() {
 
   // ADD A DAY BUTTON FUNCTIONALITY //
 
-  var addADay = function(){
-
-    var addedDay = {
-      hotel: [], 
-      thingsToDo: [], 
-      restaurants: [], 
-      markers: [], 
-      dayNum: dayPlans.length + 1
-    };
+  var addADay = function(id){
 
     // push new day object to dayPlans array
-    dayPlans.push(addedDay);
 
     $dayButton = 
       $("<button type='button' class='btn btn-default dayButton'>Day " + 
-      addedDay.dayNum + "</button>"); 
+      ($('#daybtns').children().length + 1) + "</button>").data({'id':id}); 
 
     $dayButton.appendTo($("#daybtns")); 
 
-    $dayButton.on('click', function(event){
-      currentDay = dayPlans[$(this).index()];
-      console.log('day clicked: ', $(this).index()) 
-      console.log('DAY', currentDay.dayNum)
-      console.log(dayPlans)
-      renderDays(); 
+    // $dayButton.on('click', function(event){
+    //   currentDay = dayPlans[$(this).index()];
+    //   renderDays(); 
       
-    });
+
+}
+  
+  $(document).delegate('#daybtns', 'click', function(event){
+   var $target = $(event.target);
+   console.log($target) 
+   var id = $target.data('id'); 
+   console.log(id); 
+   $('#daybtns > .btn-primary').removeClass('btn-primary'); 
+   $target.addClass('btn-primary');
+     var url = '/days/'+ id
+     
+     $.ajax({
+      url: url,
+      type: 'GET',
+      data: '',
+      dataType: 'json',
+      success: function(day) {
+        console.log(day)
+        renderDay(day)
+    }
+  }); 
+});
+
+function buildItem(item){
+  return '<li>' + item + '</li>'
+}
+
+function renderDay(day){
+
+  console.log('day', day)
+  console.log(day.thingsToDo)
+
+  if (day.hotels !== undefined){
+  $('#hotelsList').html(buildItem(day.hotel))    
   }
 
-  $("#addDay").on('click', function(event){
-    addADay(); 
-  })
+  if (day.thingsToDo !== []){
+  $('#thingsList').append(day.thingsToDo.map(buildItem))    
+  }
 
+  if (day.restaurants !== []){
+  $('restaurantsList').append(day.restaurants.map(buildItem))    
+  }
+}
+
+
+  // $("#addDay").on('click', function(event){
+  //   addADay(); 
+  // })
+
+  $('#addDay').on('click', function(event) {
+    $.ajax({
+      url: '/days',
+      type: 'POST',
+      data: '',
+      dataType: 'json',
+      success: function(day) {
+        var id = day._id; 
+        addADay(id) 
+      }
+    });
+  });
+
+
+  // })
 
   // on app start, run addADay
-  addADay(); 
+  // addADay(); 
 
 
   //     ADD REST/HOTEL/THING BUTTON      //
 
   $('.addButton').on('click', function(event){
 
+
+    var dayId = $('#thisday').data(obj._id)
+/*
     var selectedHotel = $('select[name="hotels"] :selected')
     var selectedThing = $('select[name="things"] :selected')
     var selectedRestaurant = $('select[name="restaurants"] :selected')
@@ -115,6 +165,20 @@ $(document).ready(function() {
       }
     }
   })
+*/
+
+  function writeVisitToServer(attraction_id, dayId, type_of_place) {
+    var post_data = {
+      attraction_id: attraction_id,
+      attraction_type: type_of_place
+    };
+
+    var post_callback = function(responseData) {
+
+    };
+
+    $.post('/days/' + dayId + '/attractions', post_data, post_callback);
+  }
 
 
   ////////////RENDER DAYS ////////////////////////
@@ -196,4 +260,4 @@ $(document).ready(function() {
 
 });
 
-
+});

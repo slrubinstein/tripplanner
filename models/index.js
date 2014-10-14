@@ -39,7 +39,7 @@ var daySchema = new Schema({
 	hotels: String,
 	restaurants: Array, // TO DO: limit array length to 3
 	thingsToDo: Array,
-	day_number: Integer 
+	day_number: Number 
 });
 
 // var day = Day.create()
@@ -50,9 +50,12 @@ ThingsToDo = mongoose.model('ThingsToDo', thingsToDoSchema);
 Restaurant = mongoose.model('Restaurant', restaurantSchema);
 Day = mongoose.model('Day', daySchema);
 
+
+
 module.exports = {
 	Place: Place,
 	Hotel: Hotel,
 	ThingsToDo: ThingsToDo,
-	Restaurant: Restaurant
+	Restaurant: Restaurant,
+	Day: Day
 }
