@@ -14,49 +14,88 @@ router.post('/', function(req, res) {
 	console.log('create new day post')
 	Day.create({}, function(err, day) {
 		console.log(day)
-		res.json('index', day)
+		res.json(day)
 	});
-
 });
 
-router.post('/:dayId/attractions', function(req, res) {
-// add attraction to day
-	var dayId = req.params.dayId;
-	Day.FindById(dayId, function(err, day) {
-		var thisDay = day;
+// router.post('/:dayId/attractions', function(req, res) {
+// // add attraction to day
+// 	Day.findById(req.params.dayId, function(err, day) {
 
-		if (post_data.attraction_type === 'hotel') {
-			Hotel.FindById(post_data.attraction_id, function(err, hotel) {
-				thisDay = ({
-					'hotel': hotel
-				})
-			})
+// 		if (req.body.type === 'hotels') {
+// 			Hotel.findById(req.body.id, function(err, hotel) {
+// 				day['hotels'].push(hotel);
+// 				day.save(function(err, day){
+// 					res.json(day)
+// 				})
+// 			})
 
-		} else if (post_data.attraction_type === 'restaurant') {
-			Restaurant.FindById(post_data.attraction_id, function(err, restaurant) {
-				thisDay = ({
-					'restaurant': restaurant
-				})
-			})
-		} else {
-			ThingsToDo.FindById(post_data.attraction_id, function(err, thing) {
-				thisDay = ({
-					'thingsToDo': thing
-				})
-			})
+// 		} else if (req.body.type === 'restaurants') {
+// 			Restaurant.findById(req.body.id, function(err, restaurant) {
+// 				day['restaurants'].push(restaurant); 
+// 				day.save(function(err, day){
+// 					res.json(day)
+// 				})
+// 			})
+
+// 		} else {
+// 			ThingsToDo.findById(req.body.id, function(err, thing) {
+// 				day['thingsToDo'].push(thing)			
+// 				day.save(function(err, day){
+// 					res.json(day)
+// 				})
+// 			})
+// 		}
+// 	})
+// 	// res.json('index', day);
+// });
+
+router.post('/:dayId/attractions', function(req, res){
+	Day.findById(req.params.dayId, function(err, day){
+		if (req.body.type === 'hotels'){
+			day['hotels'].push(req.body.id)
+			day.save()
 		}
-	})
-	thisDay.save() 
-	res.redirect('/');
 
+		else if (req.body.type === 'restaurants'){
+			day['restaurants'].push(req.body.id)
+			day.save()
+		}
+		
+		else {
+			day['thingsToDo'].push(req.body.id)
+			day.save()
+		}
+		day.populate('hotels restaurants thingsToDo', function(err, newDay) {
+			res.json(newDay);
+		})
+		// res.json(day.populate('Hotels'));
+		// res.json(day);
+		// }).populate('Hotels Restaurant ThingsToDo')
+})
 });
 
 router.get('/:dayId', function(req, res) {
 	Day.findById(req.params.dayId, function(err, day){
-		console.log(req.params.dayId); 
-		console.log(day)
-		res.json(day)
+		day.populate('Hotels Restaurant ThingsToDo');
+		res.json(day);
 	});
 });
+
+// router.get('/', function(req, res){
+// 	Day.find(function(err, days){
+// 		res.json(days);
+// 	})
+// })
+
+
+router.get('/', function(req, res){
+	Day.find(function(err, days){
+		console.log(days)
+			res.json(days)
+	});
+});
+
+
 
 module.exports = router;

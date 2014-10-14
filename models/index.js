@@ -36,9 +36,9 @@ var restaurantSchema = new Schema({
 });
 
 var daySchema = new Schema({
-	hotels: String,
-	restaurants: Array, // TO DO: limit array length to 3
-	thingsToDo: Array,
+	hotels: [{type: Schema.Types.ObjectId, ref: 'Hotel'}],
+	restaurants: [{type: Schema.Types.ObjectId, ref: 'Restaurant'}], 
+	thingsToDo: [{type: Schema.Types.ObjectId, ref: 'ThingsToDo'}],
 	day_number: Number 
 });
 
