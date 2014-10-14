@@ -36,10 +36,10 @@ var restaurantSchema = new Schema({
 });
 
 var daySchema = new Schema({
-	hotel: String,
+	hotels: String,
 	restaurants: Array, // TO DO: limit array length to 3
-	things: Array,
-	name: String 
+	thingsToDo: Array,
+	day_number: Integer 
 });
 
 // var day = Day.create()

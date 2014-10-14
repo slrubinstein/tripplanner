@@ -23,6 +23,7 @@ $(document).ready(function() {
       title: obj.name,
       animation: google.maps.Animation.DROP
     });
+    
   }
 
   all_hotels.forEach(function(hotel) {
@@ -59,9 +60,6 @@ $(document).ready(function() {
     // push new day object to dayPlans array
     dayPlans.push(addedDay);
 
-    // set new currentDay
-    // currentDay = dayPlans[addedDay.dayNum - 1]; 
-
     $dayButton = 
       $("<button type='button' class='btn btn-default dayButton'>Day " + 
       addedDay.dayNum + "</button>"); 
@@ -72,6 +70,7 @@ $(document).ready(function() {
       currentDay = dayPlans[$(this).index()];
       console.log('day clicked: ', $(this).index()) 
       console.log('DAY', currentDay.dayNum)
+      console.log(dayPlans)
       renderDays(); 
       
     });
@@ -186,40 +185,11 @@ $(document).ready(function() {
   // DELETE DAY HANDLER
 
   $('#deleteDay').on('click', function() {
-    // console.log('dayplans', dayPlans)
-    // console.log('day', currentDay.dayNum)
-    // var deletedDay = currentDay.dayNum
-
-    // console.log('deleting day', deletedDay)
-
-    // if (deletedDay === 1) {
-    //   currentDay = dayPlans[0];
-    // } else {
-    //   currentDay = dayPlans[deletedDay - 2]
-    // }
-
-    // console.log('new day', currentDay)
-
-    // for (deletedDay; deletedDay <= dayPlans.length; deletedDay++) {
-    //   console.log('FOR LOOP')
-    //   console.log(dayPlans[deletedDay].dayNum, dayPlans[deletedDay+1].dayNum)
-    //   dayPlans[deletedDay-1] = dayPlans[deletedDay];
-    //   deletedDay++;
-    // }
-    // dayPlans.pop()
-
-    // console.log($('.dayButton').last())
-    
-    // console.log('new day plans', dayPlans)
-
     var deletedDay = currentDay;
 
     currentDay = dayPlans[deletedDay.dayNum-1]
 
-    for(var i = deletedDay.dayNum; i < dayPlans.length; i++) {
-      dayPlans[i-1] = dayPlans[i]
-    }
-    dayPlans.pop();
+    dayPlans.splice(deletedDay, 1);
     $('.dayButton').last().remove();
 
   })
