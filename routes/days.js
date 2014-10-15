@@ -11,44 +11,19 @@ var Day = models.Day;
 
 router.post('/', function(req, res) {
 // create a day
-	console.log('create new day post')
 	Day.create({}, function(err, day) {
-		console.log(day)
 		res.json(day)
 	});
 });
 
-// router.post('/:dayId/attractions', function(req, res) {
-// // add attraction to day
-// 	Day.findById(req.params.dayId, function(err, day) {
+router.post('/:dayId/deleteDay', function(req, res){
+	Day.findByIdAndRemove(req.params.dayId, function(err, day){
+		Day.find(function(err, days){
+			res.json(days);
+		})
+	})
+})
 
-// 		if (req.body.type === 'hotels') {
-// 			Hotel.findById(req.body.id, function(err, hotel) {
-// 				day['hotels'].push(hotel);
-// 				day.save(function(err, day){
-// 					res.json(day)
-// 				})
-// 			})
-
-// 		} else if (req.body.type === 'restaurants') {
-// 			Restaurant.findById(req.body.id, function(err, restaurant) {
-// 				day['restaurants'].push(restaurant); 
-// 				day.save(function(err, day){
-// 					res.json(day)
-// 				})
-// 			})
-
-// 		} else {
-// 			ThingsToDo.findById(req.body.id, function(err, thing) {
-// 				day['thingsToDo'].push(thing)			
-// 				day.save(function(err, day){
-// 					res.json(day)
-// 				})
-// 			})
-// 		}
-// 	})
-// 	// res.json('index', day);
-// });
 
 router.post('/:dayId/attractions', function(req, res){
 	Day.findById(req.params.dayId, function(err, day){
@@ -66,27 +41,47 @@ router.post('/:dayId/attractions', function(req, res){
 			day['thingsToDo'].push(req.body.id)
 			day.save()
 		}
-		day.populate('hotels restaurants thingsToDo', function(err, newDay) {
-			res.json(newDay);
-		})
-		// res.json(day.populate('Hotels'));
-		// res.json(day);
-		// }).populate('Hotels Restaurant ThingsToDo')
-})
+		day.save(function(err) {
+			day.populate('hotels restaurants thingsToDo', function(err, newDay) {
+				res.json(newDay);
+			});
+		});	
+	})
 });
 
 router.get('/:dayId', function(req, res) {
 	Day.findById(req.params.dayId, function(err, day){
-		day.populate('Hotels Restaurant ThingsToDo');
-		res.json(day);
+		day.populate('hotels restaurants thingsToDo', function(err, newDay){
+			res.json(newDay);			
+		});
 	});
 });
 
-// router.get('/', function(req, res){
-// 	Day.find(function(err, days){
-// 		res.json(days);
-// 	})
-// })
+router.post('/:dayId/delete', function(req, res){
+	var index; 
+	Day.findById(req.params.dayId, function(err, day){
+		if (req.body.type === 'restaurants'){
+			index = day.restaurants.indexOf(req.body.id)
+			console.log('index: ', day.restaurants.indexOf(req.body.id))
+			day.restaurants.splice(index, 1)
+			day.save();
+		} else if (req.body.type === 'hotels'){
+			index = day.hotels.indexOf(req.body.id)
+			day.hotels.splice(index, 1)
+			day.save();
+		} else if (req.body.type === 'things'){
+			console.log('things type', req.body.type)
+			index = day.thingsToDo.indexOf(req.body.id)
+			day.thingsToDo.splice(index, 1)
+			day.save();
+		}
+		day.save(function(err){
+			day.populate('hotels restaurants thingsToDo', function(err, newDay){
+				res.json(newDay);
+			})
+		}); 
+	});  
+});
 
 
 router.get('/', function(req, res){

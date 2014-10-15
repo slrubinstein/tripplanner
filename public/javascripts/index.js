@@ -1,21 +1,20 @@
 $(document).ready(function() {
 
-
-    $.ajax({
-      url: '/days',
-      type: 'GET',
-      data: '',
-      dataType: 'json',
-      success: function(days) {
-        renderAllDay(days) 
-      }
-    })
-
-    function renderAllDay(days){
-      days.forEach(function(day) {
-        addADay(day._id)
-      })
+  $.ajax({
+    url: '/days',
+    type: 'GET',
+    data: '',
+    dataType: 'json',
+    success: function(days) {
+      renderAllDay(days) 
     }
+  })
+
+  function renderAllDay(days){
+    days.forEach(function(day) {
+      addADay(day._id)
+    })
+  }
 
   // GLOBALS
   var dayPlans = [];
@@ -23,6 +22,7 @@ $(document).ready(function() {
   var $things = $('#thingsList').clone();
   var $hotels = $('#hotelsList').clone();
   var $restaurants = $('#restaurantsList').clone();
+  var $daybtns = $('#daybtns').clone(); 
 
   var mapOptions = {
     zoom: 14,
@@ -77,32 +77,52 @@ $(document).ready(function() {
     $dayButton.appendTo($("#daybtns")); 
   }
 
+var reNumberDays = function(days){
+
+  $('#daybtns').replaceWith($daybtns.clone()) 
+
+  days.forEach(function(day){
+    $dayButton = $("<button type='button' class='btn btn-default dayButton'>Day " + 
+      ($('#daybtns').children().length + 1) + "</button>").data({'id': day._id}); 
+
+    $dayButton.appendTo($("#daybtns"));
+    
+  })
+
+  days.forEach(function(day){
+    renderDay(day)
+  })
+}
+
 
   $(document).delegate('#daybtns', 'click', function(event){
-   var $target = $(event.target);
-   // console.log($target) 
-   var id = $target.data('id'); 
-   // console.log(id); 
+    // console.log('in event')
+    var $target = $(event.target);
+    var dayId = $target.data('id'); 
+    // console.log('dayId', dayId)
    $('#daybtns > .btn-primary').removeClass('btn-primary'); 
    $target.addClass('btn-primary');
-     var url = '/days/'+ id
+
+    var url = '/days/'+ dayId;
+   // console.log(dayId); 
      
      $.ajax({
       url: url,
       type: 'GET',
       data: '',
       dataType: 'json',
-      success: function(day) {
-        renderDay(day)
+      success: function(newDay) {
+        // console.log('after click', newDay)
+        renderDay(newDay)
     }
-  }); 
+  });
 });
 
 function buildItem(item){
-  delBtn = 
+  var delBtn = 
     "<button type='button' class='btn-xs btn-danger del'> x </button>";
 
-  return '<li>' + item.name + delBtn + '</li>'
+  return $('<li>' + item.name + delBtn + '</li>').data(item);
 }
 
 function renderDay(day){
@@ -123,23 +143,6 @@ function renderDay(day){
   }
 }
 
-// function renderDay(day){
-
-//   if (day.hotels !== []){
-//     $('#hotelsList').replaceWith($hotels.clone());
-//     $('#hotelsList').append(day.hotels.map(buildItem))    
-//   }
-
-//   if (day.thingsToDo !== []){
-//     $('#thingsList').replaceWith($things.clone()); 
-//     $('#thingsList').append(day.thingsToDo.map(buildItem))
-//   }
-
-//   if (day.restaurants !== []){
-//     $('#restaurantsList').replaceWith($restaurants.clone());
-//     $('#restaurantsList').append(day.restaurants.map(buildItem));    
-//   }
-// }
 
   $('#addDay').on('click', function(event) {
     $.ajax({
@@ -155,13 +158,34 @@ function renderDay(day){
   });
 
 
+  // DELETE DAY HANDLER
+
+  $('#deleteDay').on('click', function() {
+    console.log('in event')
+    var dayId = $('#daybtns > .btn-primary').data('id')
+      console.log(dayId)
+     $.ajax({
+      url: '/days/' + dayId + '/deleteDay',
+      type: 'POST',
+      data: '',
+      dataType: 'json',
+      success: function(days) {
+        reNumberDays(days);  
+      }
+    });
+
+  });
 
 
-  var addFirstDay = function() {
-    $('#daybtns').children().eq(0).addClass('btn-primary'); 
-  }
+  // addFirstDay = function() {
+  //   setTimeout($('#daybtns').children().eq(0).addClass('btn-primary'), 0);
+  //   $('#addDay').trigger('click');
+  // }
 
-  $('#addDay').trigger('click', addFirstDay());
+  // if ($('#daybtns').children().length === 0) {
+  //   console.log('executing because ' + $('#daybtns').children().length + ' equals 0')
+  //   addFirstDay();
+  // }
 
 
   //     ADD REST/HOTEL/THING BUTTON      //
@@ -194,94 +218,47 @@ function renderDay(day){
       type: 'POST',
       data: data,
       dataType: 'json',
-      success: function(day) {
-        console.log('populate day: ', day)
-        renderDay(day) 
-    }
-  });
-}); 
+      success: function(newDay) {
+        // console.log('populate day: ', newDay)
+        renderDay(newDay) 
+      }
+    });
+  }); 
 
   // DELETE ITEM HANDLER
   $('.this-plan').on('click', '.del', function(event){
-    console.log('in delete')
-    var $itemToRemove = $(this).closest('li'); 
-    var itemData = $itemToRemove.data()
-    console.log(itemData)
-    var postdata = {}
+    var $target = $(event.target)
+    var dayId = $('#daybtns > .btn-primary').data('id')
+    var postdata = {};
+    var url = '/days/' + dayId + '/delete'
 
-    if ($itemToRemove.parent().attr('id') === 'restaurantsList'){
+    if ($target.closest('ul').attr('id') === 'restaurantsList'){
       postdata.type = 'restaurants'; 
-      postdata.id = $itemToRemove.data("_id")
-      removeRestaurant($itemToRemove);
+      postdata.id = $target.closest('li').data("_id")
     }
-    else if ($itemToRemove.parent().attr('id') === 'hotelsList'){
-      removeHotel($itemToRemove);
-
+    else if ($target.closest('ul').attr('id') === 'hotelsList'){
+      postdata.type = 'hotels'; 
+      postdata.id = $target.closest('li').data("_id")
     }
-    else if ($itemToRemove.parent().attr('id') === 'thingsList'){
-      removeThing($itemToRemove);      
+    else if ($target.closest('ul').attr('id') === 'thingsList'){
+      // console.log('in things')
+      postdata.type = 'things'; 
+      postdata.id = $target.closest('li').data("_id")
     }
 
-    // delete item from currentDay array
-    // currentDay.hotels.splice(selectedIndex, 1)
-    // if ($itemToRemove.parent().attr('id') === 'restaurantsList')
-    //   removeRestaurant($itemToRemove);
-
-    // $itemToRemove.remove()
-
-    
     $.ajax({
-    url: '/days',
+    url: url,
     type: 'POST',
     data: postdata,
     dataType: 'json',
-    success: function(day) {
-      renderDay(day) 
+    success: function(newDay) {
+      // console.log('DAY RETURNED', newDay)
+      renderDay(newDay) 
     }
   }); 
-
-  function removeHotel(hotel) {
-    currentDay.hotel = [];
-  }
-
-  function removeRestaurant(restaurant) {
-    currentDay.restaurants.splice(restaurant.index() , 1)
-  }
-
-  function removeThing(thing) {
-    currentDay.thingsToDo.splice(thing.index() , 1)
-  }
+}); 
 
 
-    // var dayId = $('#thisday').data(obj._id)
-/*
-    var selectedHotel = $('select[name="hotels"] :selected')
-    var selectedThing = $('select[name="things"] :selected')
-    var selectedRestaurant = $('select[name="restaurants"] :selected')
-
-    if (this.id === 'things'){ 
-      currentDay.thingsToDo.push(selectedThing.val());  
-      selectedThing.data('marker').setMap(map);
-      renderDays(); 
-      }
-    else if (this.id === 'hotels'){
-      if (currentDay.hotel.length < 1){
-        currentDay.hotel.push(selectedHotel.val());
-        selectedHotel.data('marker').setMap(map);
-        renderDays(); 
-      } else {
-        alert('You must remove a hotel to add one!')
-      } 
-    }
-    else if (this.id === 'restaurants'){
-      if (currentDay.restaurants.length < 3){
-        currentDay.restaurants.push(selectedRestaurant.val()); 
-        selectedRestaurant.data('marker').setMap(map);
-        renderDays();      
-      }
-    }
-  })
-*/
 
   function writeVisitToServer(attraction_id, dayId, type_of_place) {
     var post_data = {
@@ -297,57 +274,7 @@ function renderDay(day){
   }
 
 
-  ////////////RENDER DAYS ////////////////////////
-
   
 
-  // function renderDays(){
-
-  //   $('#subhead').empty()
-  //   $('#subhead').append('Day ', currentDay.dayNum)
-
-  //   var hotelsList = '';
-  //   if (currentDay.hotel.length > 0) {
-  //     hotelsList += '<li>' + currentDay.hotel + delBtn + '</li>'
-  //   }
-  //   $('#hotelsList').html(function(){
-  //     return hotelsList; 
-  //   });
-  //   var thingsToDo = ""; 
-  //   currentDay.thingsToDo.forEach(function(thing){
-  //     things = '<li>' + thing + delBtn + '</li>';
-  //     thingsToDo += things; 
-  //     $(things).append(delBtn)  
-  //   });
-
-  //   $('#thingsList').html(function(){
-  //     return thingsToDo; 
-  //   })
-
-  //   var restaurants = ""; 
-  //   currentDay.restaurants.forEach(function(restaurant){      
-  //     restaurants += '<li>' + restaurant + delBtn + '</li>'; 
-  //   }); 
-
-  //   $('#restaurantsList').html(function(){
-  //     return restaurants; 
-  //   })
-  // }
-
-
-
-  // // DELETE DAY HANDLER
-
-  // $('#deleteDay').on('click', function() {
-  //   var deletedDay = currentDay;
-
-  //   currentDay = dayPlans[deletedDay.dayNum-1]
-
-  //   dayPlans.splice(deletedDay, 1);
-  //   $('.dayButton').last().remove();
-
-  // });
 
 });
-
-// });
